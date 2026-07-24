@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac9e9ffdc47ab04c9d0cf4cd5a25021, type: 3}
+  m_Name: FormData_Default
+  m_EditorClassIdentifier: Assembly-CSharp::FormData
+  formName: Default
+  moveSpeed: 7
+  jumpPower: 7
+  maxHP: 100
+  jumpCount: 1
+  animatorController: {fileID: 0}
+  formPrefab: {fileID: 103380811750077614, guid: dc4d03e9834464d82a1dec0da2b8162f, type: 3}
+  weaponRange: R_Weapon
+  attackDamage: 2
+  attackDuration: 2
+  attackCooldown: 0.2
+  projectileId: 
+  attackTriggerOverride: 
+  skillTriggerOverride: SkillMelee
+  skillCooldown: 10
+  skillDamage: 0
+  skillDuration: 0
+  skillProjectileId: 
+  skillAnimDuration: 0.4

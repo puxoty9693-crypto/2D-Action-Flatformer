@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac9e9ffdc47ab04c9d0cf4cd5a25021, type: 3}
+  m_Name: FormData_Archer
+  m_EditorClassIdentifier: Assembly-CSharp::FormData
+  formName: Archer
+  moveSpeed: 7
+  jumpPower: 4
+  maxHP: 90
+  jumpCount: 2
+  animatorController: {fileID: 0}
+  formPrefab: {fileID: 7127064250040410633, guid: 74081d2c7552d4c17953e46326368c4b, type: 3}
+  weaponRange: R_Weapon
+  attackDamage: 0
+  attackDuration: 0
+  attackCooldown: 1
+  projectileId: Arrow
+  attackTriggerOverride: 
+  skillTriggerOverride: SkillBow
+  skillCooldown: 10
+  skillDamage: 0
+  skillDuration: 0
+  skillProjectileId: 
+  skillAnimDuration: 0.4

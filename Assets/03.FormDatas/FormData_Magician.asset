@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac9e9ffdc47ab04c9d0cf4cd5a25021, type: 3}
+  m_Name: FormData_Magician
+  m_EditorClassIdentifier: Assembly-CSharp::FormData
+  formName: Magician
+  moveSpeed: 4
+  jumpPower: 5
+  maxHP: 80
+  jumpCount: 1
+  animatorController: {fileID: 0}
+  formPrefab: {fileID: 2832778511305924686, guid: 420c9e2d4f8084ea68e81a6ff465b947, type: 3}
+  weaponRange: R_Weapon
+  attackDamage: 0
+  attackDuration: 0
+  attackCooldown: 2
+  projectileId: Fireball
+  attackTriggerOverride: 
+  skillTriggerOverride: SkillMagic
+  skillCooldown: 30
+  skillDamage: 50
+  skillDuration: 2
+  skillProjectileId: Meteor
+  skillAnimDuration: 1

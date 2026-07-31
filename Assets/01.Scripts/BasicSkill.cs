@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BasicSkill : MonoBehaviour, IAttackBehaviour
+public class BasicSkill : MonoBehaviour, IAttackBehaviour, IPlayerBoundSkill
 {
     [SerializeField] private ParticleSystem effectPrefab;
     [SerializeField] private Transform effectSpawnPoint;
@@ -29,6 +29,14 @@ public class BasicSkill : MonoBehaviour, IAttackBehaviour
 
 
     }
+
+    public void SetHealth(Health h) 
+    {
+        if (h != null)
+            health = h;
+        
+    }
+
 
     public bool CanUse() 
     {

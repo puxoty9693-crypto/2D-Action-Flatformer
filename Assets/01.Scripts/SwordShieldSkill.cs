@@ -1,71 +1,104 @@
+using NUnit.Framework.Interfaces;
 using System.Collections;
 using UnityEngine;
 
-public class SwordShieldSkill : MonoBehaviour, IAttackBehaviour
+public class SwordShieldSkill : MonoBehaviour, IAttackBehaviour, IPlayerBoundSkill
 {
-    [SerializeField] private float invincibleDuration = 2f;
+    [SerializeField] private float guardDuration = 2f;
     [SerializeField] private float cooldownTime = 8f;
-
-    [SerializeField] private Color invincibleColor = new Color(1f, 1f, 1f, 0.5f);
-    [SerializeField] private bool blink = true;
-    [SerializeField] private float blinkInterval = 0.1f;
+    [SerializeField] private Color auraColor = new Color(0.4f, 0.8f, 1f, 0.6f);
+    [SerializeField] private float pulseSpeed = 6f;
+    [SerializeField] private float minAlpha = 0.2f;
+    [SerializeField] private float maxAlpha = 0.7f;
+    [SerializeField] private SpriteRenderer auraRenderer;
 
     private float lastUseTime = -999f;
-    private SpriteRenderer sr;
-    private PlayerHealth playerHealth;
-    private Color originalColor;
-    private Coroutine invincibleRoutine;
-    public bool IsInvincible { get; private set; }
+    private Health health;
+    private Coroutine guardRoutine;
 
+    public bool IsGuarding { get; private set; }
     private void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
-        playerHealth = GetComponent<PlayerHealth>();
-        originalColor = sr.color;
-
+        ApplyAuraDefaults();
     }
 
-    public bool CanUse() 
+    public void SetHealth(Health h) 
+    {
+        if(h != null) 
+            health = h;
+    }
+
+    public void SetAuraRenderer(SpriteRenderer renderer)
+    {
+        auraRenderer = renderer;
+        ApplyAuraDefaults();
+    }
+
+    private void ApplyAuraDefaults() 
+    {
+        if(auraRenderer == null) return;
+        auraRenderer.color = auraColor;
+        auraRenderer.gameObject.SetActive(false);
+    }
+
+    public bool CanUse()
     {
         return Time.time >= lastUseTime + cooldownTime;
     }
 
-    public void Attack(Vector3 spawnPos, Vector2 direction) 
+    public void Attack(Vector3 spawnPos, Vector2 direction)
     {
         if(!CanUse()) return;
+        if (health == null) return;
 
-        if(invincibleRoutine != null)
-            StopCoroutine(invincibleRoutine);
 
-        invincibleRoutine = StartCoroutine(InvincibleRoutine());
+        if (guardRoutine != null)
+            StopCoroutine(guardRoutine);
+
+        guardRoutine = StartCoroutine(GuardRoutine());
         lastUseTime = Time.time;
     }
 
-    private IEnumerator InvincibleRoutine() 
+
+
+
+    private IEnumerator GuardRoutine()
     {
-        IsInvincible = true;
+       
+        IsGuarding = true;
+
+        if (auraRenderer != null)
+            auraRenderer.gameObject.SetActive(true);
 
         float elapsed = 0f;
-        bool toggle = false;
 
-        while(elapsed < invincibleDuration) 
+        while (elapsed < guardDuration)
         {
-            if (blink) 
+            int missing = health.GetMaxHP() - health.GetCurrentHP();
+            if (missing > 0)
+                health.TakeDamage(-missing);
+           
+
+
+            if (auraRenderer != null)
             {
-                toggle = !toggle;
-                sr.color = toggle ? invincibleColor : originalColor;
-                yield return new WaitForSeconds(blinkInterval);
-                elapsed += blinkInterval;
+                float t = (Mathf.Sin(Time.time*pulseSpeed) + 1f) * 0.5f;
+                float alpha = Mathf.Lerp(minAlpha, maxAlpha, t);
+                Color c = auraColor;
+                c.a = alpha;
+                auraRenderer.color = c;
             }
-            else 
-            {
-                sr.color = invincibleColor;
-                yield return null;
-                elapsed += Time.deltaTime;
-            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        sr.color = invincibleColor;
-        elapsed += Time.deltaTime;
+        if (auraRenderer != null)
+            auraRenderer.gameObject.SetActive(false);
+        
+        IsGuarding = false;
+       
     }
+
+    
 }

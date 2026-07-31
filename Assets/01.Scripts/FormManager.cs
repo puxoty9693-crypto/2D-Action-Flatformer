@@ -42,14 +42,19 @@ public class FormManager : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame) 
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && !controller.IsBusy) 
         {
             TryAbsortForm();
         }
 
-        if (Keyboard.current.qKey.wasPressedThisFrame) 
+        if (Keyboard.current.qKey.wasPressedThisFrame && !controller.IsBusy)
         {
             CycleSlot();
+        }
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame) 
+        {
+            EndGame();
         }
     }
 
@@ -67,6 +72,10 @@ public class FormManager : MonoBehaviour
         currentSlotIndex = 1;
         ChangeForm(nearbyCorpse.formData);
 
+    }
+    private void EndGame() 
+    {
+        Application.Quit();
     }
 
     private void CycleSlot()

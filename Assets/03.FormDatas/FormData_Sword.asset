@@ -29,4 +29,6 @@ MonoBehaviour:
   skillCooldown: 10
   skillDamage: 0
   skillDuration: 0
-  skillProjectileId: 
+  skillProjectileId: BigSword
+  skillAnimDuration: 0.4
+  isGroundSkill: 1

@@ -1,37 +1,57 @@
+using NUnit.Framework.Interfaces;
+using System.Collections;
 using UnityEngine;
 
-public class ArcherSkill : MonoBehaviour, IAttackBehaviour
+public class ArcherSkill : IAttackBehaviour
 {
-    [SerializeField] private string projectileId;
-    [SerializeField] private float fireRate = 0.15f;
-    [SerializeField] private float range = 15f;
-    [SerializeField] private LayerMask targetLayer;
+    private string projectileId;
+    private LayerMask targetLayer;
+    private float range;
+    private int burstCount;
+    private float burstInterval;
+    private MonoBehaviour runner;
 
-    private float lastFireTime = -999f;
-
-    public bool IsFiring { get; private set; }
-
-    public bool CanUse()
+    public ArcherSkill(string projectileId, LayerMask targetLayer, float range, int burstCount, float burstInterval, MonoBehaviour runner)
     {
-        return Time.time >= lastFireTime + fireRate;
+        this.projectileId = projectileId;
+        this.targetLayer = targetLayer;
+        this.range = range;
+        this.burstCount = burstCount;
+        this.burstInterval = burstInterval;
+        this.runner = runner;
     }
 
-    public void Attack(Vector3 spawnPos, Vector2 direction) 
+    public void Attack(Vector3 spawnPos, Vector2 direction)
     {
-        if(!CanUse()) return;
+        runner.StartCoroutine(BurstRoutine(spawnPos, direction));
+    }
+
+    private IEnumerator BurstRoutine(Vector3 spawnPos, Vector2 direction)
+    {
+        for (int i = 0; i < burstCount; i++)
+        {
+            FireOne(spawnPos, direction);
+            yield return new WaitForSeconds(burstInterval);
+        }
+    }
+
+    private void FireOne(Vector3 spawnPos, Vector2 direction)
+    {
+        if (ProjectilePoolingManager.instance == null || string.IsNullOrEmpty(projectileId))
+            return;
 
         ProjectileData data = ProjectilePoolingManager.instance.GetData(projectileId);
-        if(data == null) return;
+        if (data == null) return;
 
         Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.right;
         Vector2 targetPos = (Vector2)spawnPos + dir * range;
 
-        GameObject obj = ProjectilePoolingManager.instance.Spawn(projectileId, spawnPos, Quaternion.identity);
-        if (obj == null) return;
+        GameObject projObj = ProjectilePoolingManager.instance.Spawn(projectileId, spawnPos, Quaternion.identity);
+        if (projObj == null) return;
 
-        Projectile projectile = obj.GetComponent<Projectile>();
-        projectile.Init(spawnPos, targetPos, data.damage, data.speed, data.lifetime, targetLayer, arcHeight: 0f, fixedAngle: data.fixedAngle);
-
-        lastFireTime = Time.time;
+        Projectile projectile = projObj.GetComponent<Projectile>();
+        projectile?.Init(spawnPos, targetPos, data.damage, data.speed, data.lifetime, targetLayer, arcHeight: 0f, fixedAngle: data.fixedAngle);
     }
+
+
 }

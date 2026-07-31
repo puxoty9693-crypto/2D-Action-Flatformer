@@ -31,3 +31,4 @@ MonoBehaviour:
   skillDuration: 2
   skillProjectileId: Meteor
   skillAnimDuration: 1
+  isGroundSkill: 1

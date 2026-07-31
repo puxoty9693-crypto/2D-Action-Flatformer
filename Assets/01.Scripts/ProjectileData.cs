@@ -14,4 +14,7 @@ public class ProjectileData : ScriptableObject
     public float lifetime = 5f;
     public float arcHeight = 0f;
     public float fixedAngle = 225f;
+    public float castRange = 20f;
+
+
 }

@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Unity.Burst;
 using UnityEngine;
 
 public class FormApplier
@@ -32,6 +33,8 @@ public class FormApplier
         playerHealth.SetMaxHP(newForm.maxHP);
 
 
+        
+
         if (currentVisual != null)
         {
             currentVisual.SetActive(false);
@@ -52,7 +55,7 @@ public class FormApplier
 
         if (!string.IsNullOrEmpty(newForm.projectileId))
         {
-            controller.SetAttackBehaviour(new RangedAttack(newForm.projectileId, newForm.attackDamage, LayerMask.GetMask("Enemy")));
+            controller.SetAttackBehaviour(new RangedAttack(newForm.projectileId, LayerMask.GetMask("Enemy")));
         }
 
         
@@ -73,19 +76,51 @@ public class FormApplier
             }
         }
 
-        if (!string.IsNullOrEmpty(skilllProjId)) 
+
+        IAttackBehaviour customSkill = newVisual != null ? newVisual.GetComponentInChildren<IAttackBehaviour>() : null;
+
+        if(customSkill is IPlayerBoundSkill playerBound) 
         {
-            controller.SetSkillBehaviour(new RangedAttack(skilllProjId, newForm.skillDamage, LayerMask.GetMask("Enemy")));
+            playerBound.SetHealth(playerHealth);
+        }
+
+
+        if(customSkill is SwordShieldSkill swordShield) 
+        {
+            swordShield.SetAuraRenderer(controller.GetInvincibleAuraRenderer());
+        }
+        
+        if(customSkill is AxeSkill axeSkill) 
+        {
+            WeaponHitbox axeHitbox = FormPoolingManager.instance.GetWeaponHitbox(newForm);
+            axeSkill.SetContext(controller, axeHitbox, newForm.attackDamage, newForm.attackDuration, newForm.attackCooldown, newForm.maxHP);
+            axeSkill.SetAuraRenderer(controller.GetInvincibleAuraRenderer());
 
         }
 
-        else 
+        if (customSkill != null)
+        {
+            controller.SetSkillBehaviour(customSkill);
+        }
+        else if (!string.IsNullOrEmpty(skilllProjId))
+        {
+            if (newForm.skillBurstCount > 1) 
+            {
+                controller.SetSkillBehaviour(new ArcherSkill(skilllProjId, LayerMask.GetMask("Enemy"), newForm.skillRange, newForm.skillBurstCount, newForm.skillBurstInterval, controller));
+            }
+
+            else 
+            {
+                
+                controller.SetSkillBehaviour(new RangedAttack(skilllProjId, LayerMask.GetMask("Enemy")));
+
+            }
+        }
+
+        else
         {
             WeaponHitbox hitbox = FormPoolingManager.instance.GetWeaponHitbox(newForm);
-            if (hitbox != null)
-                controller.SetSkillBehaviour(new MeleeAttack(hitbox, newForm.skillDamage, newForm.skillDuration, controller));
-            else
-                controller.SetSkillBehaviour(null);
+            controller.SetSkillBehaviour(hitbox != null ? new MeleeAttack(hitbox, newForm.skillDamage, newForm.skillDuration, controller) : null);
         }
 
 
@@ -102,7 +137,4 @@ public class FormApplier
             return;
         currentAnimator?.SetTrigger(triggerName);
     }
-
-
-
-    }
+  }

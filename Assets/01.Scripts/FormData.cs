@@ -35,9 +35,11 @@ public class FormData : ScriptableObject
     public float skillDuration;
     public string skillProjectileId;
     public float skillAnimDuration = 0.4f;
-    
 
-
+    //연사 스킬
+    public float skillRange = 15f;
+    public int skillBurstCount = 1;
+    public float skillBurstInterval = 0.15f;
 
 
 }

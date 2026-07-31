@@ -20,7 +20,7 @@ MonoBehaviour:
   animatorController: {fileID: 0}
   formPrefab: {fileID: 6873661223484744056, guid: 35dd3fb4ba4d64845bc8225ae1796b6a, type: 3}
   weaponRange: R_Weapon
-  attackDamage: 8
+  attackDamage: 10
   attackDuration: 3
   attackCooldown: 0.5
   projectileId: 
@@ -30,3 +30,4 @@ MonoBehaviour:
   skillDamage: 0
   skillDuration: 0
   skillProjectileId: 
+  skillAnimDuration: 0.4

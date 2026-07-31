@@ -24,6 +24,7 @@ public abstract class Projectile : MonoBehaviour, IPoolable
         this.elapsed = 0f;
         this.arcHeight = arcHeight;
         this.fixedAngle = fixedAngle;
+        this.damage = damage;
 
         float distance = Vector2.Distance(start, target);
         this.duration = Mathf.Max(0.1f, distance/speed);
@@ -45,19 +46,19 @@ public abstract class Projectile : MonoBehaviour, IPoolable
 
     protected abstract void Move();
 
-    protected virtual void OnTriggerEnter2D(Collider2D other) 
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
             return;
 
-        IDamageable damageable = other.GetComponent<IDamageable>();
-        if (damageable != null) 
+        IDamageable damageable = other.GetComponentInParent<IDamageable>();
+        
+
+        if (damageable != null)
         {
             damageable.TakeDamage(damage);
         }
-
         ReturnToPool();
-            
     }
 
     protected void ReturnToPool() 

@@ -20,11 +20,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackHitDelay = 0.15f;
     [SerializeField] private Transform firePoint;
 
+    [SerializeField] private SpriteRenderer invincibleAuraRenderer;
     [SerializeField] private float skillCooldown = 10f;
     [SerializeField] private float skillAnimDuration = 0.4f;
     [SerializeField] private float skillHitDelay = 0.2f;
     
+    public bool IsBusy => isAttacking || isUsingSkill;
 
+    public SpriteRenderer GetInvincibleAuraRenderer() => invincibleAuraRenderer;
 
     public void SetAttackCooldown(float cooldown) => attackCooldown = cooldown;
     public void SetSKillCooldown(float cooldown) => skillCooldown = cooldown;
@@ -198,6 +201,7 @@ public class PlayerController : MonoBehaviour
     public void SetJumpBehaviour(IJumpBehaviour newBehavior) => jumpBehaviour = newBehavior;
     public IJumpBehaviour GetJumpBehaviour() => jumpBehaviour;
     public void SetAttackBehaviour(IAttackBehaviour newBehavior) => attackBehaviour = newBehavior;
+
 
     public void SetSkillBehaviour(IAttackBehaviour newBehaviour) => skillBehaviour = newBehaviour;
 

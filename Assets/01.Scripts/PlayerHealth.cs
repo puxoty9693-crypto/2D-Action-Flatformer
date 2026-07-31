@@ -16,7 +16,7 @@ public class PlayerHealth : Health
 
         base.TakeDamage(amount);
 
-        if(currentHP > 0) 
+        if(amount > 0 && currentHP > 0) 
         {
             formManager?.PlayAnimation(PlayerState.DAMAGED, 0);
             StartCoroutine(InvincibleTime());

@@ -5696,9 +5696,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SwordShieldSkill
   invincibleDuration: 2
   cooldownTime: 8
-  invincibleColor: {r: 0.8577736, g: 0.9716981, b: 0.0045834924, a: 0.5}
-  blink: 1
-  blinkInterval: 0.1
+  auraColor: {r: 1, g: 1, b: 1, a: 0.6}
+  pulseSpeed: 6
+  minAlpha: 0.2
+  maxAlpha: 0.7
+  auraRenderer: {fileID: 0}
 --- !u!1 &5697273362229997445
 GameObject:
   m_ObjectHideFlags: 0
